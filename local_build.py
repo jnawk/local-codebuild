@@ -27,8 +27,11 @@ def main():
     buildspec = yaml.load(input_file, Loader=Loader)
 
     buildenv = os.environ
-    for var in buildspec['env']['variables']:
-        buildenv[var] = buildspec['env']['variables'][var]
+    try:
+        for var in buildspec['env']['variables']:
+            buildenv[var] = buildspec['env']['variables'][var]
+    except KeyError:
+        pass
 
     for command in buildspec['phases']['build']['commands']:
         process = subprocess.Popen(command, env=buildenv, shell=True)
